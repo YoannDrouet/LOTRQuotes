@@ -14,7 +14,7 @@ body{
 header {
 
     width: 100%;
-    background-color: #202124;
+    background-color: #28292c;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -31,10 +31,49 @@ h1{
     font-weight: normal;
 }
 
+#arianne {
+    width: 100%;
+}
+
+#arianne p {
+    font-size: 12px;
+}
+#arianne p:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .content {
     border: 1px #4f5052 solid;
+    max-width: 80%;
     border-radius: 10px;
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.content.home{
+    @media (min-width: 990px) {
+        flex-direction: row;
+    }
+}
+
+.content p {
+    width: fit-content;
+}
+
+.content .character {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+}
+
+.content .character:hover{
+    cursor: pointer;
 }
 
 .content .character img {
@@ -42,3 +81,16 @@ h1{
     border-radius: 100px;
 }
 
+.quote {
+    position: relative;
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.quote p {
+}
+.quote i:hover {
+    cursor: pointer;
+}
