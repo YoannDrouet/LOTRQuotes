@@ -79,9 +79,9 @@ function viewQuotes(quotes) {
     for (let i = 0; i < quotes.length; i++) {
         content.innerHTML += "" +
             "<div class='quote'>" +
-            "<p>" + quotes[i].dialog + "</p>" +
-            "<i class=\"fa-regular fa-heart favorite\"></i>" +
-            "</div>";
+            "<p>" + quotes[i].dialog + "</p>" + (favList.includes(quotes[i].dialog) ? "<i class=\"fa-solid fa-heart favorite\"></i>" :"<i class=\"fa-regular fa-heart favorite\"></i>") +
+                "</div>";
+
         if (i == 20) {
             break;
         }
