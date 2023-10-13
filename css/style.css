@@ -94,3 +94,19 @@ h1{
 .quote i:hover {
     cursor: pointer;
 }
+
+#viewFavorite {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #b19259;
+    box-shadow: none;
+    border-style: none;
+}
+
+#viewFavorite.hidden {
+    display: none;
+}
+
+#viewFavorite:hover {
+    cursor: pointer;
+}
