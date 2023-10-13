@@ -1,15 +1,15 @@
-/*document.getElementsByClassName("character").forEach((element) => {
-    element.addEventListener("click", function (){
-        console.log(("click"));
-    });
-});*/
+let favList = [];
+const favButton = document.getElementById("viewFavorite");
 homePage();
+
+favButton.addEventListener("click", viewFavorite);
 
 function homePage() {
     const title = document.querySelector('h1');
     const content = document.getElementById("content");
     title.textContent = "Choisissez un personnage";
     content.classList.add("home")
+    favButton.classList.remove("hidden");
     content.innerHTML =
         "<div class=\"character\" id=\"5cd99d4bde30eff6ebccfbe6\">\n" +
         "            <img src=\"images/Aragorn.jpg\">\n" +
@@ -38,6 +38,35 @@ function homePage() {
     }
 }
 
+function backButton() {
+    const backHome = document.getElementById("backHome");
+    favButton.classList.remove("hide");
+    backHome.addEventListener("click", function () {
+        homePage();
+    });
+}
+
+function changeFav(favPage) {
+    const favButtons = document.getElementsByClassName("favorite");
+    for (let i = 0; i < favButtons.length; i++) {
+        favButtons[i].addEventListener("click", function () {
+            if (this.classList.contains("fa-regular")) {
+                favList.push(this.previousSibling.innerText);
+                this.classList.remove("fa-regular");
+                this.classList.add("fa-solid");
+            } else {
+                let index = favList.indexOf(this.previousSibling.innerText);
+                favList.splice(index, 1);
+                this.classList.remove("fa-solid");
+                this.classList.add("fa-regular");
+                if (favPage){
+                    displayFavorite();
+                }
+            }
+        });
+    }
+}
+
 function viewQuotes(quotes) {
     const title = document.querySelector('h1');
     const content = document.getElementById("content");
@@ -51,18 +80,44 @@ function viewQuotes(quotes) {
         content.innerHTML += "" +
             "<div class='quote'>" +
             "<p>" + quotes[i].dialog + "</p>" +
-            "<i class=\"fa-regular fa-heart\"></i>" +
+            "<i class=\"fa-regular fa-heart favorite\"></i>" +
             "</div>";
-        if (i == 20){
+        if (i == 20) {
             break;
         }
     }
 
-    const backHome = document.getElementById("backHome");
-    console.log(backHome);
-    backHome.addEventListener("click", function () {
-        homePage();
-    });
+    backButton();
+
+    changeFav(false);
+}
+
+function viewFavorite(){
+    const title = document.querySelector('h1');
+    title.textContent = "Vos citations favorites";
+    favButton.classList.add("hidden");
+
+    displayFavorite();
+}
+
+function displayFavorite() {
+    const content = document.getElementById("content");
+    content.classList.remove("home");
+    content.classList.add("favorites");
+    content.innerHTML = "" +
+        "<div id='arianne'>" +
+        "<p id='backHome'>Revenir au choix des personnages</p>" +
+        "</div>";
+
+    for (let i = 0; i < favList.length; i++) {
+        content.innerHTML += "" +
+            "<div class='quote'>" +
+            "<p>" + favList[i] + "</p>" +
+            "<i class=\"fa-solid fa-heart favorite\"></i>" +
+            "</div>";
+    }
+    changeFav(true);
+    backButton();
 }
 
 async function callAPI(id) {
