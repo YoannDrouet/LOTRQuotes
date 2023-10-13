@@ -1,3 +1,7 @@
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register("/../serviceworker.js");
+}
+
 let favList = [];
 const favButton = document.getElementById("viewFavorite");
 homePage();

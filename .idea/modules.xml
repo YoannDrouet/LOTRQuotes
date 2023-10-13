@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Seigneur des Anneaux.iml" filepath="$PROJECT_DIR$/.idea/Seigneur des Anneaux.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SeigneurDesAnneaux/.idea/SeigneurDesAnneaux.iml" filepath="$PROJECT_DIR$/../SeigneurDesAnneaux/.idea/SeigneurDesAnneaux.iml" />
     </modules>
   </component>
 </project>
