@@ -3,6 +3,7 @@ if ('serviceWorker' in navigator) {
 }
 
 let favList;
+let quotesList;
 
 if (typeof localStorage != 'undefined'){
     favList = localStorage.getItem("favorites");
@@ -10,6 +11,33 @@ if (typeof localStorage != 'undefined'){
         favList = JSON.parse(favList);
     } else {
         favList = [];
+    }
+}
+getQuotesList();
+
+async function getQuotesList() {
+    if (typeof localStorage != 'undefined') {
+        quotesList = localStorage.getItem("quotesList");
+        if (quotesList != null) {
+            quotesList = JSON.parse(quotesList);
+        } else {
+            //Aragorn, Gandalf, Gimli, Legolas
+            quotesList = [];
+            const charactersList = [
+                "5cd99d4bde30eff6ebccfbe6",
+                "5cd99d4bde30eff6ebccfea0",
+                "5cd99d4bde30eff6ebccfd23",
+                "5cd99d4bde30eff6ebccfd81"
+            ];
+            for (let i = 0; i < charactersList.length; i++) {
+                const characterQuotes = await callAPI(charactersList[i]);
+                quotesList.push({
+                    id: charactersList[i],
+                    quotes: characterQuotes
+                });
+            }
+            localStorage.setItem("quotesList", JSON.stringify(quotesList));
+        }
     }
 }
 
@@ -46,8 +74,12 @@ function homePage() {
 
     for (let i = 0; i < characters.length; i++) {
         characters[i].addEventListener("click", async function () {
-            const quote = await callAPI(characters[i].id);
-            viewQuotes(quote.docs);
+            for (let j = 0; j < quotesList.length; j++) {
+                if (quotesList[j].id === characters[i].id){
+                    viewQuotes(quotesList[j].quotes.docs);
+                    break;
+                }
+            }
         })
     }
 }
