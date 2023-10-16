@@ -2,7 +2,17 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register("./serviceworker.js");
 }
 
-let favList = [];
+let favList;
+
+if (typeof localStorage != 'undefined'){
+    favList = localStorage.getItem("favorites");
+    if (favList != null) {
+        favList = JSON.parse(favList);
+    } else {
+        favList = [];
+    }
+}
+
 const favButton = document.getElementById("viewFavorite");
 homePage();
 
@@ -67,6 +77,7 @@ function changeFav(favPage) {
                     displayFavorite();
                 }
             }
+            localStorage.setItem("favorites", JSON.stringify(favList));
         });
     }
 }
