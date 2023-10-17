@@ -3,7 +3,8 @@ var filesToCache = [
     './',
     './index.html',
     './css/style.css',
-    './js/script.js'
+    './js/script.js',
+    './images/*'
 ];
 
 /* Start the service worker and cache all of the app's content */
@@ -24,4 +25,4 @@ self.addEventListener('fetch', function(e) {
         })
     );
 });
-const version = '0.0.3';
+const version = '0.0.4';
