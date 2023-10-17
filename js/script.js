@@ -5,12 +5,27 @@ if ('serviceWorker' in navigator) {
 let favList;
 let quotesList;
 
-if (typeof localStorage != 'undefined'){
+if (typeof localStorage != 'undefined') {
     favList = localStorage.getItem("favorites");
     if (favList != null) {
         favList = JSON.parse(favList);
     } else {
-        favList = [];
+        favList = [
+            {
+                character: "Aragorn",
+                quotes: []
+            },
+            {
+                character: "Gandalf",
+                quotes: []
+            }, {
+                character: "Gimli",
+                quotes: []
+            }, {
+                character: "Legolas",
+                quotes: []
+            },
+        ];
     }
 }
 getQuotesList();
@@ -24,15 +39,28 @@ async function getQuotesList() {
             //Aragorn, Gandalf, Gimli, Legolas
             quotesList = [];
             const charactersList = [
-                "5cd99d4bde30eff6ebccfbe6",
-                "5cd99d4bde30eff6ebccfea0",
-                "5cd99d4bde30eff6ebccfd23",
-                "5cd99d4bde30eff6ebccfd81"
+                {
+                    id: "5cd99d4bde30eff6ebccfbe6",
+                    name: "Aragorn"
+                },
+                {
+                    id: "5cd99d4bde30eff6ebccfea0",
+                    name: "Gandalf"
+                },
+                {
+                    id: "5cd99d4bde30eff6ebccfd23",
+                    name: "Gimli"
+                },
+                {
+                    id: "5cd99d4bde30eff6ebccfd81",
+                    name: "Legolas"
+                }
             ];
             for (let i = 0; i < charactersList.length; i++) {
-                const characterQuotes = await callAPI(charactersList[i]);
+                const characterQuotes = await callAPI(charactersList[i].id);
                 quotesList.push({
-                    id: charactersList[i],
+                    id: charactersList[i].id,
+                    character: charactersList[i].name,
                     quotes: characterQuotes
                 });
             }
@@ -75,8 +103,8 @@ function homePage() {
     for (let i = 0; i < characters.length; i++) {
         characters[i].addEventListener("click", async function () {
             for (let j = 0; j < quotesList.length; j++) {
-                if (quotesList[j].id === characters[i].id){
-                    viewQuotes(quotesList[j].quotes.docs);
+                if (quotesList[j].id === characters[i].id) {
+                    viewQuotes(quotesList[j]);
                     break;
                 }
             }
@@ -97,7 +125,11 @@ function changeFav(favPage) {
     for (let i = 0; i < favButtons.length; i++) {
         favButtons[i].addEventListener("click", function () {
             if (this.classList.contains("fa-regular")) {
-                favList.push(this.previousSibling.innerText);
+                for (let j = 0; j < favList.length; j++) {
+                    if (favList[j].character === this.parentElement.id){
+                        favList[j].quotes.push(this.previousSibling.innerText);
+                    }
+                }
                 this.classList.remove("fa-regular");
                 this.classList.add("fa-solid");
             } else {
@@ -105,7 +137,7 @@ function changeFav(favPage) {
                 favList.splice(index, 1);
                 this.classList.remove("fa-solid");
                 this.classList.add("fa-regular");
-                if (favPage){
+                if (favPage) {
                     displayFavorite();
                 }
             }
@@ -114,7 +146,7 @@ function changeFav(favPage) {
     }
 }
 
-function viewQuotes(quotes) {
+function viewQuotes(character) {
     const title = document.querySelector('h1');
     const content = document.getElementById("content");
     content.classList.remove("home");
@@ -123,23 +155,20 @@ function viewQuotes(quotes) {
         "<div id='arianne'>" +
         "<p id='backHome'>Revenir au choix des personnages</p>" +
         "</div>";
-    for (let i = 0; i < quotes.length; i++) {
+    for (let i = 0; i < 20; i++) {
         content.innerHTML += "" +
-            "<div class='quote'>" +
-            "<p>" + quotes[i].dialog + "</p>" + (favList.includes(quotes[i].dialog) ? "<i class=\"fa-solid fa-heart favorite\"></i>" :"<i class=\"fa-regular fa-heart favorite\"></i>") +
-                "</div>";
-
-        if (i == 20) {
-            break;
-        }
+            "<div class='quote' id='" + character.character + "'>" +
+            "<p>" + character.quotes.docs[i].dialog + "</p>" + (favList.includes(character.quotes.docs[i].dialog) ? "<i class=\"fa-solid fa-heart favorite\"></i>" : "<i class=\"fa-regular fa-heart favorite\"></i>") +
+            "</div>";
     }
+    content.innerHTML += "</div>";
 
     backButton();
 
     changeFav(false);
 }
 
-function viewFavorite(){
+function viewFavorite() {
     const title = document.querySelector('h1');
     title.textContent = "Vos citations favorites";
     favButton.classList.add("hidden");
@@ -157,11 +186,20 @@ function displayFavorite() {
         "</div>";
 
     for (let i = 0; i < favList.length; i++) {
-        content.innerHTML += "" +
-            "<div class='quote'>" +
-            "<p>" + favList[i] + "</p>" +
-            "<i class=\"fa-solid fa-heart favorite\"></i>" +
-            "</div>";
+
+        if (favList[i].quotes.length > 0){
+            content.innerHTML += "<div class=\"characterFav\" id=\"5cd99d4bde30eff6ebccfea0\">\n" +
+            "            <img src=\"images/" + favList[i].character + ".jpg\">\n" +
+            "            <p class=\"characterName\">" + favList[i].character + "</p>\n" +
+            "        </div>";
+            for (let j = 0; j < favList[i].quotes.length; j++) {
+                content.innerHTML += "" +
+                    "<div class='quote'>" +
+                    "<p>" + favList[i].quotes[j] + "</p>" +
+                    "<i class=\"fa-solid fa-heart favorite\"></i>" +
+                    "</div>";
+            }
+        }
     }
     changeFav(true);
     backButton();
