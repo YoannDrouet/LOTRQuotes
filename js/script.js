@@ -18,10 +18,12 @@ if (typeof localStorage != 'undefined') {
             {
                 character: "Gandalf",
                 quotes: []
-            }, {
+            },
+            {
                 character: "Gimli",
                 quotes: []
-            }, {
+            },
+            {
                 character: "Legolas",
                 quotes: []
             },
@@ -99,7 +101,6 @@ function homePage() {
         "        </div>";
 
     const characters = document.getElementsByClassName("character");
-
     for (let i = 0; i < characters.length; i++) {
         characters[i].addEventListener("click", async function () {
             for (let j = 0; j < quotesList.length; j++) {
@@ -126,15 +127,19 @@ function changeFav(favPage) {
         favButtons[i].addEventListener("click", function () {
             if (this.classList.contains("fa-regular")) {
                 for (let j = 0; j < favList.length; j++) {
-                    if (favList[j].character === this.parentElement.id){
+                    if (favList[j].character === this.parentElement.id) {
                         favList[j].quotes.push(this.previousSibling.innerText);
                     }
                 }
                 this.classList.remove("fa-regular");
                 this.classList.add("fa-solid");
             } else {
-                let index = favList.indexOf(this.previousSibling.innerText);
-                favList.splice(index, 1);
+                for (let j = 0; j < favList.length; j++) {
+                    if (favList[j].quotes.includes(this.previousSibling.innerText)) {
+                        let index = favList[j].quotes.indexOf(this.previousSibling.innerText);
+                        favList[j].quotes.splice(index, 1);
+                    }
+                }
                 this.classList.remove("fa-solid");
                 this.classList.add("fa-regular");
                 if (favPage) {
@@ -151,6 +156,14 @@ function viewQuotes(character) {
     const content = document.getElementById("content");
     content.classList.remove("home");
     title.textContent = "Voici les citations";
+    quotesListFav = [];
+    for (let i = 0; i < favList.length; i++) {
+        if (favList[i].quotes.length > 0) {
+            for (let j = 0; j < favList[i].quotes.length; j++) {
+                quotesListFav.push(favList[i].quotes[j]);
+            }
+        }
+    }
     content.innerHTML = "" +
         "<div id='arianne'>" +
         "<p id='backHome'>Revenir au choix des personnages</p>" +
@@ -158,7 +171,7 @@ function viewQuotes(character) {
     for (let i = 0; i < 20; i++) {
         content.innerHTML += "" +
             "<div class='quote' id='" + character.character + "'>" +
-            "<p>" + character.quotes.docs[i].dialog + "</p>" + (favList.includes(character.quotes.docs[i].dialog) ? "<i class=\"fa-solid fa-heart favorite\"></i>" : "<i class=\"fa-regular fa-heart favorite\"></i>") +
+            "<p>" + character.quotes.docs[i].dialog + "</p>" + (quotesListFav.includes(character.quotes.docs[i].dialog) ? "<i class=\"fa-solid fa-heart favorite\"></i>" : "<i class=\"fa-regular fa-heart favorite\"></i>") +
             "</div>";
     }
     content.innerHTML += "</div>";
@@ -187,11 +200,11 @@ function displayFavorite() {
 
     for (let i = 0; i < favList.length; i++) {
 
-        if (favList[i].quotes.length > 0){
+        if (favList[i].quotes.length > 0) {
             content.innerHTML += "<div class=\"characterFav\" id=\"5cd99d4bde30eff6ebccfea0\">\n" +
-            "            <img src=\"images/" + favList[i].character + ".jpg\">\n" +
-            "            <p class=\"characterName\">" + favList[i].character + "</p>\n" +
-            "        </div>";
+                "            <img src=\"images/" + favList[i].character + ".jpg\">\n" +
+                "            <p class=\"characterName\">" + favList[i].character + "</p>\n" +
+                "        </div>";
             for (let j = 0; j < favList[i].quotes.length; j++) {
                 content.innerHTML += "" +
                     "<div class='quote'>" +
